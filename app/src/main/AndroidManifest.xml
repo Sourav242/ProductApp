@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProductApp"
-        tools:targetApi="33">
+        tools:targetApi="34">
         <activity
             android:name=".product.view.ProductActivity"
             android:exported="true"

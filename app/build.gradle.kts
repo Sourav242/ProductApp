@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.example.productapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.productapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.foundation:foundation-android:1.5.1")
     
     //view binding
     implementation("androidx.compose.ui:ui-viewbinding:1.4.3")

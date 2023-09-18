@@ -27,7 +27,7 @@ class SharedProductViewModel @Inject constructor(
 ): BaseViewModel(repository) {
 
     private val productStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
-        MutableStateFlow(NetworkState.Empty())
+        MutableStateFlow(NetworkState.Empty(listOf()))
     val _productStateFlow: StateFlow<NetworkState<List<Product>>> = productStateFlow
 
     init {
@@ -35,7 +35,11 @@ class SharedProductViewModel @Inject constructor(
     }
 
     fun getProducts(search: String? = null) = viewModelScope.launch {
-        productStateFlow.value = NetworkState.Loading()
+        productStateFlow.value.data?.let {
+            productStateFlow.value = NetworkState.LoadingWithData(it)
+        } ?: run {
+            productStateFlow.value = NetworkState.Loading()
+        }
         repository.getProducts(search)
             .catch { e ->
                 productStateFlow.value = NetworkState.Failure(e)
@@ -43,7 +47,11 @@ class SharedProductViewModel @Inject constructor(
             }.stateIn(
                 viewModelScope,
                 SharingStarted.Eagerly,
-                ResponseModel(0, listOf(), 0, 0)
+                productStateFlow.value.data?.let {
+                    ResponseModel(0, it, 0, 0)
+                } ?: run {
+                    ResponseModel(0, listOf(), 0, 0)
+                }
             ).collect {
                 val response = it.products
                 productStateFlow.value = NetworkState.Success(response)
