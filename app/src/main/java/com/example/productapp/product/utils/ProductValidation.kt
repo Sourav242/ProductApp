@@ -1,6 +1,6 @@
 package com.example.productapp.product.utils
 
-import com.example.productapp.product.utils.Constants.MIN_TEXT_LENGTH_SEARCH
+import com.example.productapp.product.utils.ProductConstants.MIN_TEXT_LENGTH_SEARCH
 
 /**
  * @Author: Sourav PC

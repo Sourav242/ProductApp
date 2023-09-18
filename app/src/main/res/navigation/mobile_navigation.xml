@@ -2,10 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mobile_navigation.xml"
-    app:startDestination="@id/productFragment">
+    app:startDestination="@id/productHomeFragment">
 
     <fragment
-        android:id="@+id/productFragment"
+        android:id="@+id/productHomeFragment"
         android:name="com.example.productapp.product.screens.producthome.view.ProductHomeFragment"
-        android:label="ProductFragment" />
+        android:label="ProductHomeFragment">
+        <action
+            android:id="@+id/action_productHomeFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.productapp.product.screens.productdetails.view.ProductDetailsFragment"
+        android:label="ProductDetailsFragment">
+        <argument
+            android:name="productId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 </navigation>

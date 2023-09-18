@@ -18,9 +18,15 @@ class ProductRepository @Inject constructor() : BaseRepository() {
         emit(
             search?.let {
                 productApiInterface.getProducts(it)
-            }?: run {
+            } ?: run {
                 productApiInterface.getProducts()
             }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun getProduct(id: Int): Flow<Product> = flow {
+        emit(
+            productApiInterface.getProduct(id)
         )
     }.flowOn(Dispatchers.IO)
 }

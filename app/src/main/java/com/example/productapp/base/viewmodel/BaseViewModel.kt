@@ -1,10 +1,12 @@
 package com.example.productapp.base.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.example.productapp.base.repository.BaseRepository
 
 /**
  * @Author: Sourav PC
  * @Date: 18-09-2023
  */
-abstract class BaseViewModel(repository: BaseRepository): ViewModel()
+abstract class BaseViewModel(application: Application, repository: BaseRepository) :
+    AndroidViewModel(application)

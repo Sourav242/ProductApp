@@ -2,6 +2,7 @@ package com.example.productapp.product.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.productapp.ProductApplication
 import com.example.productapp.base.model.NetworkState
 import com.example.productapp.base.model.ResponseModel
 import com.example.productapp.base.viewmodel.BaseViewModel
@@ -23,37 +24,63 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedProductViewModel @Inject constructor(
+    application: ProductApplication,
     private val repository: ProductRepository
-): BaseViewModel(repository) {
+) : BaseViewModel(application, repository) {
 
-    private val productStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
+    private val productsStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
         MutableStateFlow(NetworkState.Empty(listOf()))
-    val _productStateFlow: StateFlow<NetworkState<List<Product>>> = productStateFlow
+    val _productsStateFlow: StateFlow<NetworkState<List<Product>>> = productsStateFlow
+
+    private val productStateFlow: MutableStateFlow<NetworkState<Product>> =
+        MutableStateFlow(NetworkState.Empty(Product()))
+    val _productStateFlow: StateFlow<NetworkState<Product>> = productStateFlow
 
     init {
         getProducts()
     }
 
     fun getProducts(search: String? = null) = viewModelScope.launch {
-        productStateFlow.value.data?.let {
-            productStateFlow.value = NetworkState.LoadingWithData(it)
+        productsStateFlow.value.data?.let {
+            productsStateFlow.value = NetworkState.LoadingWithData(it)
         } ?: run {
-            productStateFlow.value = NetworkState.Loading()
+            productsStateFlow.value = NetworkState.Loading()
         }
         repository.getProducts(search)
             .catch { e ->
-                productStateFlow.value = NetworkState.Failure(e)
+                productsStateFlow.value = NetworkState.Failure(e)
                 Log.d("errorResponse", e.message.toString())
             }.stateIn(
                 viewModelScope,
                 SharingStarted.Eagerly,
-                productStateFlow.value.data?.let {
+                productsStateFlow.value.data?.let {
                     ResponseModel(0, it, 0, 0)
                 } ?: run {
                     ResponseModel(0, listOf(), 0, 0)
                 }
             ).collect {
                 val response = it.products
+                productsStateFlow.value = NetworkState.Success(response)
+                Log.d("apiResponse", response.toString())
+            }
+    }
+
+    fun getProduct(id: Int) = viewModelScope.launch {
+        productStateFlow.value.data?.let {
+            productStateFlow.value = NetworkState.LoadingWithData(it)
+        } ?: run {
+            productStateFlow.value = NetworkState.Loading()
+        }
+        repository.getProduct(id)
+            .catch { e ->
+                productsStateFlow.value = NetworkState.Failure(e)
+                Log.d("errorResponse", e.message.toString())
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                productStateFlow.value.data ?: Product()
+            ).collect {
+                val response = it
                 productStateFlow.value = NetworkState.Success(response)
                 Log.d("apiResponse", response.toString())
             }
