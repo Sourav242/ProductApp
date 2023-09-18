@@ -9,10 +9,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +30,8 @@ import com.example.productapp.ui.theme.ProductAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductHomeBody(viewModel: SharedProductViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     ProductAppTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -39,13 +45,18 @@ fun ProductHomeBody(viewModel: SharedProductViewModel) {
                             Greeting()
                         }
                     )
+                },
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
                 }
             ) { contentPadding ->
                 Column(
                     modifier = Modifier.padding(contentPadding)
                 ) {
                     SearchBody()
+
                     val productState = viewModel._productStateFlow.collectAsStateWithLifecycle()
+
                     when (productState.value) {
                         is NetworkState.Success -> {
                             productState.value.data?.let {
@@ -53,7 +64,9 @@ fun ProductHomeBody(viewModel: SharedProductViewModel) {
                             }
                         }
                         is NetworkState.Failure -> {
-
+                            productState.value.error?.let {
+                                ProductError(it, snackbarHostState)
+                            }
                         }
                         is NetworkState.Loading -> {
 
@@ -64,6 +77,17 @@ fun ProductHomeBody(viewModel: SharedProductViewModel) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ProductError(error: Throwable, snackbarHostState: SnackbarHostState) {
+    LaunchedEffect("ProductError") {
+        error.message?.let {
+            snackbarHostState.showSnackbar(
+                it
+            )
         }
     }
 }

@@ -12,8 +12,8 @@ import retrofit2.http.Query
 
 interface ProductApiInterface {
     @GET("/products")
-    fun getProducts(): ResponseModel<List<Product>>
+    suspend fun getProducts(): ResponseModel<List<Product>>
 
     @GET("/products/search")
-    fun getProducts(@Query("q") query: String): ResponseModel<List<Product>>
+    suspend fun getProducts(@Query("q") query: String): ResponseModel<List<Product>>
 }
