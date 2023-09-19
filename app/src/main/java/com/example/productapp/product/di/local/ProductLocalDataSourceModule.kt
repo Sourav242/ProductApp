@@ -1,6 +1,6 @@
 package com.example.productapp.product.di.local
 
-import com.example.productapp.di.local.ProductDatabase
+import com.example.productapp.base.di.local.ProductDatabase
 import com.example.productapp.product.repository.local.ProductDao
 import dagger.Module
 import dagger.Provides

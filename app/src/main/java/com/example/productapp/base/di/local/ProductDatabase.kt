@@ -1,4 +1,4 @@
-package com.example.productapp.di.local
+package com.example.productapp.base.di.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
