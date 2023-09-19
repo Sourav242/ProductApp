@@ -1,4 +1,4 @@
-package com.example.productapp.di
+package com.example.productapp.di.remote
 
 import com.example.productapp.BuildConfig
 import dagger.Module

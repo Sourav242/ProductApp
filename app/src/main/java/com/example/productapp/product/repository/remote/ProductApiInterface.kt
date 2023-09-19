@@ -1,4 +1,4 @@
-package com.example.productapp.product.api
+package com.example.productapp.product.repository.remote
 
 import com.example.productapp.base.model.ResponseModel
 import com.example.productapp.product.model.Product

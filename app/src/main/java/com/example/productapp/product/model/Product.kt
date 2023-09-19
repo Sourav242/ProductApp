@@ -1,9 +1,15 @@
 package com.example.productapp.product.model
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "product")
 data class Product(
+    @PrimaryKey
+    @SerializedName("id")
+    var id: Int = 0,
     @SerializedName("brand")
     var brand: String = "",
     @SerializedName("category")
@@ -12,8 +18,6 @@ data class Product(
     var description: String = "",
     @SerializedName("discountPercentage")
     var discountPercentage: Double = 0.0,
-    @SerializedName("id")
-    var id: Int = 0,
     @SerializedName("images")
     var images: List<String> = listOf(),
     @SerializedName("price")

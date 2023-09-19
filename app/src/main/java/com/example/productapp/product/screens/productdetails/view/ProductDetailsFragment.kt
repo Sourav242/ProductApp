@@ -10,8 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import com.example.productapp.ProductApplication
-import com.example.productapp.product.repository.ProductRepository
 import com.example.productapp.product.viewmodel.SharedProductViewModel
 
 /**
@@ -42,10 +40,5 @@ class ProductDetailsFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun ProductPreview() {
-    ProductDetailsBody(
-        SharedProductViewModel(
-            ProductApplication(),
-            ProductRepository()
-        )
-    )
+    //ProductDetailsBody()
 }

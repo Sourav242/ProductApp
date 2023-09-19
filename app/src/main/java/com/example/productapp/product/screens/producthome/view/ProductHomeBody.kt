@@ -42,11 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.productapp.ProductApplication
 import com.example.productapp.R
 import com.example.productapp.base.model.NetworkState
 import com.example.productapp.product.model.Product
-import com.example.productapp.product.repository.ProductRepository
 import com.example.productapp.product.utils.validateSearchText
 import com.example.productapp.product.viewmodel.SharedProductViewModel
 import com.example.productapp.ui.theme.ProductAppTheme
@@ -271,10 +269,5 @@ fun Greeting(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun ProductBodyPreview() {
-    ProductHomeBody(
-        SharedProductViewModel(
-            ProductApplication(),
-            ProductRepository()
-        )
-    )
+    //ProductHomeBody()
 }

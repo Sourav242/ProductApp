@@ -1,6 +1,6 @@
-package com.example.productapp.product.di
+package com.example.productapp.product.di.remote
 
-import com.example.productapp.product.api.ProductApiInterface
+import com.example.productapp.product.repository.remote.ProductApiInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
