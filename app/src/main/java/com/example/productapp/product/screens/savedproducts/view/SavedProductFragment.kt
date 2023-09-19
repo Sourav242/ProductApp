@@ -1,4 +1,4 @@
-package com.example.productapp.product.screens.producthome.view
+package com.example.productapp.product.screens.savedproducts.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.productapp.R
+import com.example.productapp.product.screens.producthome.view.ProductHomeBody
 import com.example.productapp.product.viewmodel.SharedProductViewModel
 
 /**
@@ -18,7 +19,7 @@ import com.example.productapp.product.viewmodel.SharedProductViewModel
  * @Date: 18-09-2023
  */
 
-class ProductHomeFragment : Fragment() {
+class SavedProductFragment : Fragment() {
 
     private val viewModel: SharedProductViewModel by activityViewModels()
 
@@ -29,20 +30,17 @@ class ProductHomeFragment : Fragment() {
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         )
 
+        viewModel.getSavedProducts()
+
         setContent {
-            ProductHomeBody(viewModel = viewModel, true, { id ->
+            ProductHomeBody(viewModel = viewModel, false, onItemClick = { id ->
                 val bundle = Bundle()
                 bundle.putInt("productId", id)
                 findNavController().navigate(R.id.productDetailsFragment, bundle)
                 /*findNavController().navigate(
                     ProductHomeFragmentDirections.actionProductHomeFragmentToProductDetailsFragment(id)
                 )*/
-            }, {
-                findNavController().navigate(
-                    ProductHomeFragmentDirections.actionProductHomeFragmentToSavedProductFragment()
-                )
-            }
-            )
+            })
         }
     }
 }

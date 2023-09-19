@@ -32,12 +32,21 @@ class SharedProductViewModel @Inject constructor(
         MutableStateFlow(NetworkState.Empty(listOf()))
     val _productsStateFlow: StateFlow<NetworkState<List<Product>>> = productsStateFlow
 
+    private val savedProductsStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
+        MutableStateFlow(NetworkState.Empty(listOf()))
+    val _savedProductsStateFlow: StateFlow<NetworkState<List<Product>>> = savedProductsStateFlow
+
     private val productStateFlow: MutableStateFlow<NetworkState<Product>> =
         MutableStateFlow(NetworkState.Empty(Product()))
     val _productStateFlow: StateFlow<NetworkState<Product>> = productStateFlow
 
+    private val savedProductStateFlow: MutableStateFlow<NetworkState<Product>> =
+        MutableStateFlow(NetworkState.Empty(Product()))
+    val _savedProductStateFlow: StateFlow<NetworkState<Product>> = savedProductStateFlow
+
     init {
         getProducts()
+        getSavedProducts()
     }
 
     fun getProducts(search: String? = null) = viewModelScope.launch {
@@ -83,6 +92,90 @@ class SharedProductViewModel @Inject constructor(
                 val response = it
                 productStateFlow.value = NetworkState.Success(response)
                 Log.d("apiResponse", response.toString())
+            }
+    }
+
+    fun getSavedProducts() = viewModelScope.launch {
+        savedProductsStateFlow.value.data?.let {
+            savedProductsStateFlow.value = NetworkState.LoadingWithData(it)
+        } ?: run {
+            savedProductsStateFlow.value = NetworkState.Loading()
+        }
+        repository.getSavedProducts()
+            .catch { e ->
+                savedProductsStateFlow.value = NetworkState.Failure(e)
+                Log.d("errorResponse", e.message.toString())
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                savedProductsStateFlow.value.data ?: listOf()
+            ).collect {
+                val response = it
+                savedProductsStateFlow.value = NetworkState.Success(response)
+                Log.d("queryResponse", response.toString())
+            }
+    }
+
+    fun getSavedProduct(id: Int) = viewModelScope.launch {
+        savedProductStateFlow.value.data?.let {
+            savedProductStateFlow.value = NetworkState.LoadingWithData(it)
+        } ?: run {
+            savedProductStateFlow.value = NetworkState.Loading()
+        }
+        repository.getSavedProduct(id)
+            .catch { e ->
+                productsStateFlow.value = NetworkState.Failure(e)
+                Log.d("errorResponse", e.message.toString())
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                savedProductStateFlow.value.data ?: Product()
+            ).collect {
+                val response = it
+                response.let {
+                    savedProductStateFlow.value = NetworkState.Success(response)
+                    Log.d("queryResponse", response.toString())
+                }
+            }
+    }
+
+    private val savedState: MutableStateFlow<NetworkState<Long>> =
+        MutableStateFlow(NetworkState.Empty(0))
+    val _savedState = savedState
+
+    fun save(product: Product) = viewModelScope.launch {
+        repository.save(product)
+            .catch { e ->
+                savedState.value = NetworkState.Failure(e)
+                Log.d("errorResponse", e.message.toString())
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                0L
+            ).collect {
+                val response = it
+                if (response > 0) {
+                    savedState.value = NetworkState.Success(response)
+                    Log.d("queryResponse", response.toString())
+                }
+            }
+    }
+
+    fun remove(product: Product) = viewModelScope.launch {
+        repository.remove(product)
+            .catch { e ->
+                savedState.value = NetworkState.Failure(e)
+                Log.d("errorResponse", e.message.toString())
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                0
+            ).collect {
+                val response = it
+                if (response > 0) {
+                    savedState.value = NetworkState.Success(response.toLong())
+                    Log.d("queryResponse", response.toString())
+                }
             }
     }
 }

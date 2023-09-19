@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_productHomeFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_productHomeFragment_to_savedProductFragment"
+            app:destination="@id/savedProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -20,5 +23,13 @@
             android:name="productId"
             android:defaultValue="0"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedProductFragment"
+        android:name="com.example.productapp.product.screens.savedproducts.view.SavedProductFragment"
+        android:label="SavedProductFragment">
+        <action
+            android:id="@+id/action_savedProductFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

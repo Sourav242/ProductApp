@@ -11,7 +11,13 @@ class ProductLocalDataSourceImpl @Inject constructor(
     private val productDao: ProductDao
 ) : ProductLocalDataSource {
 
-    override suspend fun getSavedProducts() = productDao.getSavedProducts()
+    override suspend fun getSavedProducts(category: String?): List<Product> {
+        return category?.let {
+            productDao.getSavedProducts(it)
+        } ?: run {
+            productDao.getSavedProducts()
+        }
+    }
 
     override suspend fun getSavedProduct(id: Int) = productDao.getSavedProduct(id)
 

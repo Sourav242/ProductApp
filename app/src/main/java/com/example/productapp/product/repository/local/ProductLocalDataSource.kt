@@ -7,7 +7,7 @@ import com.example.productapp.product.model.Product
  * @Date: 19-09-2023
  */
 interface ProductLocalDataSource {
-    suspend fun getSavedProducts(): List<Product>
+    suspend fun getSavedProducts(category: String? = null): List<Product>
     suspend fun getSavedProduct(id: Int): Product
     suspend fun save(product: Product): Long
     suspend fun remove(product: Product): Int
