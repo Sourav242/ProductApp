@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ProductNetworkModule {
+class ProductRemoteDataSourceModule {
     @Singleton
     @Provides
     fun providesProductApiInterface(retrofit: Retrofit): ProductApiInterface {

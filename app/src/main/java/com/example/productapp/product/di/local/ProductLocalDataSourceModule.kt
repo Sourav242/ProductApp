@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ProductDatabaseModule {
+class ProductLocalDataSourceModule {
     @Singleton
     @Provides
     fun providesProductDao(appDatabase: ProductDatabase): ProductDao {

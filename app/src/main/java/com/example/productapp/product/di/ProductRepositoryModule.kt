@@ -16,5 +16,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class ProductRepositoryModule {
     @Binds
-    abstract fun providesProductRepositoryHelper(productRepository: ProductRepositoryHelperImpl): ProductRepositoryHelper
+    abstract fun providesProductRepositoryHelper(
+        productRepository: ProductRepositoryHelperImpl
+    ): ProductRepositoryHelper
 }
