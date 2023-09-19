@@ -3,4 +3,5 @@
     <string name="product_search">Product Search</string>
     <string name="search_products">Search products</string>
     <string name="favourite">Favourite</string>
+    <string name="clear_search">Clear Search</string>
 </resources>

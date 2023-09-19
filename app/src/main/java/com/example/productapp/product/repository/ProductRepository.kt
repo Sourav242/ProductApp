@@ -23,8 +23,8 @@ class ProductRepository @Inject constructor(
     /**
      * Local
      */
-    suspend fun getSavedProducts(): Flow<List<Product>> =
-        productRepositoryHelper.getSavedProducts()
+    suspend fun getSavedProducts(search: String?): Flow<List<Product>> =
+        productRepositoryHelper.getSavedProducts(search)
 
     suspend fun getSavedProduct(id: Int): Flow<Product> =
         productRepositoryHelper.getSavedProduct(id)

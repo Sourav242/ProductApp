@@ -95,13 +95,13 @@ class SharedProductViewModel @Inject constructor(
             }
     }
 
-    fun getSavedProducts() = viewModelScope.launch {
+    fun getSavedProducts(search: String? = null) = viewModelScope.launch {
         savedProductsStateFlow.value.data?.let {
             savedProductsStateFlow.value = NetworkState.LoadingWithData(it)
         } ?: run {
             savedProductsStateFlow.value = NetworkState.Loading()
         }
-        repository.getSavedProducts()
+        repository.getSavedProducts(search)
             .catch { e ->
                 savedProductsStateFlow.value = NetworkState.Failure(e)
                 Log.d("errorResponse", e.message.toString())

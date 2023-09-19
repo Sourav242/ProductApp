@@ -15,7 +15,7 @@ interface ProductRepositoryHelper {
     /**
      * Local
      */
-    suspend fun getSavedProducts(): Flow<List<Product>>
+    suspend fun getSavedProducts(search: String?): Flow<List<Product>>
     suspend fun getSavedProduct(id: Int): Flow<Product>
     suspend fun save(product: Product): Flow<Long>
     suspend fun remove(product: Product): Flow<Int>

@@ -16,7 +16,7 @@ interface ProductDao {
     @Query("SELECT * FROM product")
     fun getSavedProducts(): List<Product>
 
-    @Query("SELECT * FROM product WHERE category in (:category)")
+    @Query("SELECT * FROM product WHERE category LIKE '%' || (:category) || '%'")
     fun getSavedProducts(category: String): List<Product>
 
     @Query("SELECT * FROM product WHERE id = :id")

@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +58,7 @@ import com.example.productapp.ui.theme.ProductAppTheme
 
 private var productViewModel: SharedProductViewModel? = null
 private var savedProducts: List<Product> = listOf()
+private var modeRemote = true
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +69,7 @@ fun ProductHomeBody(
     onSavedClick: (() -> Unit)? = null
 ) {
     productViewModel = viewModel
+    modeRemote = remote
     val snackbarHostState = remember { SnackbarHostState() }
 
     ProductAppTheme {
@@ -163,31 +166,52 @@ fun SearchBody(viewModel: SharedProductViewModel) {
         border = BorderStroke(0.5.dp, Color.Black),
         //colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        TextField(
-            // below line is used to get
-            // value of text field,
-            value = inputValue.value,
+        Box {
+            TextField(
+                // below line is used to get
+                // value of text field,
+                value = inputValue.value,
 
-            // below line is used to get value in text field
-            // on value change in text field.
-            onValueChange = {
-                inputValue.value = it
-                if (it.text.validateSearchText()) {
-                    viewModel.getProducts(it.text)
-                }
-            },
+                // below line is used to get value in text field
+                // on value change in text field.
+                onValueChange = {
+                    inputValue.value = it
+                    if (inputValue.value.text.validateSearchText()) {
+                        if (modeRemote)
+                            viewModel.getProducts(inputValue.value.text)
+                        else
+                            viewModel.getSavedProducts(inputValue.value.text)
+                    }
+                },
+                trailingIcon = {
+                    if (inputValue.value.text.isNotEmpty()) {
+                        Icon(
+                            Icons.Default.Clear,
+                            contentDescription = "clear text",
+                            modifier = Modifier
+                                .clickable {
+                                    inputValue.value = TextFieldValue("")
+                                    if (modeRemote)
+                                        viewModel.getProducts()
+                                    else
+                                        viewModel.getSavedProducts()
+                                }
+                        )
+                    }
+                },
 
-            //colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                //colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
 
-            // below line is used to add placeholder
-            // for our text field.
-            placeholder = { Text(text = stringResource(R.string.search_products)) },
+                // below line is used to add placeholder
+                // for our text field.
+                placeholder = { Text(text = stringResource(R.string.search_products)) },
 
-            // modifier is use to add padding
-            // to our text field.
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
+                // modifier is use to add padding
+                // to our text field.
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+        }
     }
 }
 
@@ -234,7 +258,7 @@ fun Favourite(modifier: Modifier, product: Product) {
                 productViewModel?.remove(product)
             }
         },
-        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.background)
+        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
     )
     val savedState = productViewModel?._savedState?.collectAsStateWithLifecycle()
     when (savedState?.value) {

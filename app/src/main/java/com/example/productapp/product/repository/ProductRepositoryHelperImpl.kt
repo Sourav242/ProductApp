@@ -37,9 +37,9 @@ class ProductRepositoryHelperImpl @Inject constructor(
      * Local
      */
 
-    override suspend fun getSavedProducts() = flow {
+    override suspend fun getSavedProducts(search: String?) = flow {
         emit(
-            productLocalDataSource.getSavedProducts()
+            productLocalDataSource.getSavedProducts(search)
         )
     }.flowOn(Dispatchers.IO)
 
