@@ -292,8 +292,7 @@ fun ProductDetails(product: Product, contentPadding: PaddingValues = PaddingValu
             Column(modifier = Modifier.padding(all = 16.dp)) {
                 Text(
                     text = product.brand,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
+                    fontSize = 16.sp
                 )
                 Text(text = product.description)
                 Row {
