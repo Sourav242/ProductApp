@@ -16,8 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +29,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,8 +90,8 @@ fun ProductHomeBody(
                                 onSavedClick?.invoke()
                             }) {
                                 Icon(
-                                    Icons.Default.Favorite,
-                                    stringResource(id = R.string.favourite)
+                                    painter = painterResource(id = R.drawable.baseline_bookmark_24),
+                                    contentDescription = stringResource(id = R.string.favourite)
                                 )
                             }
                         }
@@ -164,7 +165,9 @@ fun SearchBody(viewModel: SharedProductViewModel) {
             bottom = 16.dp
         ),
         border = BorderStroke(0.5.dp, Color.Black),
-        //colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
     ) {
         Box {
             TextField(
@@ -200,7 +203,9 @@ fun SearchBody(viewModel: SharedProductViewModel) {
                     }
                 },
 
-                //colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
 
                 // below line is used to add placeholder
                 // for our text field.
@@ -236,7 +241,10 @@ fun ProductItem(product: Product, onItemClick: ((Int) -> Unit)? = null) {
                 bottom = 16.dp
             )
             .clickable { onItemClick?.invoke(product.id) },
-        border = BorderStroke(0.5.dp, Color.Black)
+        border = BorderStroke(0.5.dp, Color.Black),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
     ) {
         ProductDetails(product)
     }
@@ -247,9 +255,9 @@ fun Favourite(modifier: Modifier, product: Product) {
     val fav = product in savedProducts
     Image(
         painter = if (fav)
-            painterResource(R.drawable.baseline_favorite_24)
+            painterResource(R.drawable.baseline_bookmark_24)
         else
-            painterResource(R.drawable.baseline_favorite_border_24),
+            painterResource(R.drawable.baseline_bookmark_border_24),
         contentDescription = stringResource(R.string.favourite),
         modifier = modifier.clickable {
             if (!fav) {
@@ -258,7 +266,7 @@ fun Favourite(modifier: Modifier, product: Product) {
                 productViewModel?.remove(product)
             }
         },
-        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
+        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.inverseOnSurface)
     )
     val savedState = productViewModel?._savedState?.collectAsStateWithLifecycle()
     when (savedState?.value) {
