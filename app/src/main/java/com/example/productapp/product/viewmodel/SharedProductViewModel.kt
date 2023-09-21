@@ -32,18 +32,6 @@ class SharedProductViewModel @Inject constructor(
         MutableStateFlow(NetworkState.Empty(listOf()))
     val _productsStateFlow: StateFlow<NetworkState<List<Product>>> = productsStateFlow
 
-    private val savedProductsStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
-        MutableStateFlow(NetworkState.Empty(listOf()))
-    val _savedProductsStateFlow: StateFlow<NetworkState<List<Product>>> = savedProductsStateFlow
-
-    private val productStateFlow: MutableStateFlow<NetworkState<Product>> =
-        MutableStateFlow(NetworkState.Empty(Product()))
-    val _productStateFlow: StateFlow<NetworkState<Product>> = productStateFlow
-
-    private val savedProductStateFlow: MutableStateFlow<NetworkState<Product>> =
-        MutableStateFlow(NetworkState.Empty(Product()))
-    val _savedProductStateFlow: StateFlow<NetworkState<Product>> = savedProductStateFlow
-
     init {
         getProducts()
         getSavedProducts()
@@ -74,6 +62,10 @@ class SharedProductViewModel @Inject constructor(
             }
     }
 
+    private val productStateFlow: MutableStateFlow<NetworkState<Product>> =
+        MutableStateFlow(NetworkState.Empty(Product()))
+    val _productStateFlow: StateFlow<NetworkState<Product>> = productStateFlow
+
     fun getProduct(id: Int) = viewModelScope.launch {
         productStateFlow.value.data?.let {
             productStateFlow.value = NetworkState.LoadingWithData(it)
@@ -95,6 +87,10 @@ class SharedProductViewModel @Inject constructor(
             }
     }
 
+    private val savedProductsStateFlow: MutableStateFlow<NetworkState<List<Product>>> =
+        MutableStateFlow(NetworkState.Empty(listOf()))
+    val _savedProductsStateFlow: StateFlow<NetworkState<List<Product>>> = savedProductsStateFlow
+
     fun getSavedProducts(search: String? = null) = viewModelScope.launch {
         savedProductsStateFlow.value.data?.let {
             savedProductsStateFlow.value = NetworkState.LoadingWithData(it)
@@ -115,6 +111,10 @@ class SharedProductViewModel @Inject constructor(
                 Log.d("queryResponse", response.toString())
             }
     }
+
+    private val savedProductStateFlow: MutableStateFlow<NetworkState<Product>> =
+        MutableStateFlow(NetworkState.Empty(Product()))
+    val _savedProductStateFlow: StateFlow<NetworkState<Product>> = savedProductStateFlow
 
     fun getSavedProduct(id: Int) = viewModelScope.launch {
         savedProductStateFlow.value.data?.let {
